@@ -2,10 +2,11 @@ const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
+const { resolveSoa } = require("dns");
 
 const app = express();
 
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "views")); //when we call .render() below, our app checks in this folder
 app.set("view engine", "ejs");
 
 // Task 2.4
@@ -25,6 +26,18 @@ const users = JSON.parse(userData);
 // Task 2.7 -- the index route
 app.get("/", function (req, res) {
   res.render("index", { title: "Account Summary", accounts });
+});
+
+// Task 3.5-6 -- the savings route, and the other two routes
+app.get("/savings", function (req, res) {
+  res.render("account", { account: accounts.savings });
+});
+
+app.get("/checking", function (req, res) {
+  res.render("account", { account: accounts.checking });
+});
+app.get("/credit", function (req, res) {
+  res.render("account", { account: accounts.credit });
 });
 
 // Task 2.8
