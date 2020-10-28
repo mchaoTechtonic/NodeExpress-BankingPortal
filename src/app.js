@@ -40,6 +40,11 @@ app.get("/credit", function (req, res) {
   res.render("account", { account: accounts.credit });
 });
 
+// Task 3.10
+app.get("/profile", function (req, res) {
+  res.render("profile", { user: users[0] });
+});
+
 // Task 2.8
 app.listen(3000, () => {
   console.log("PS Project Running on port 3000!");
