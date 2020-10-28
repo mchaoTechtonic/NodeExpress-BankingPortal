@@ -24,7 +24,7 @@ const users = JSON.parse(userData);
 
 // Task 2.7 -- the index route
 app.get("/", function (req, res) {
-  res.render("index", { title: "Index" });
+  res.render("index", { title: "Account Summary", accounts });
 });
 
 // Task 2.8
