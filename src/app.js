@@ -12,6 +12,9 @@ app.set("view engine", "ejs");
 // Task 2.4
 app.use(express.static(path.join(__dirname, "public")));
 
+//Task 4.1:
+app.use(express.urlencoded({ extended: true }));
+
 //Task 3.1+3.2
 const accountData = fs.readFileSync(
   path.join(__dirname, "json", "accounts.json"),
@@ -43,6 +46,11 @@ app.get("/credit", function (req, res) {
 // Task 3.10
 app.get("/profile", function (req, res) {
   res.render("profile", { user: users[0] });
+});
+
+// Task 4.2
+app.get("/transfer", function (req, res) {
+  res.render("transfer");
 });
 
 // Task 2.8
