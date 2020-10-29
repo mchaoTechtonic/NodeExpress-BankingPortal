@@ -55,8 +55,8 @@ app.get("/transfer", function (req, res) {
 
 app.post("/transfer", function (req, res) {
   const { from, to, amount } = req.body;
-  accounts[from].balance -= amount;
-  accounts[to].balance += amount;
+  accounts[from].balance -= parseInt(amount);
+  accounts[to].balance += parseInt(amount);
 });
 
 // Task 2.8
