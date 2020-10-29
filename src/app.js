@@ -57,6 +57,18 @@ app.post("/transfer", function (req, res) {
   const { from, to, amount } = req.body;
   accounts[from].balance -= parseInt(amount);
   accounts[to].balance += parseInt(amount);
+  const accountsJSON = JSON.stringify(accounts);
+  fs.writeFileSync(
+    path.join(__dirname, "json", "accounts.json"),
+    accountsJSON,
+    "utf8"
+  );
+  res.render("transfer", { message: "Transfer Completed" });
+});
+
+// Task 4.10
+app.get("/payment", function (req, res) {
+  res.render("payment", { account: accounts.credit });
 });
 
 // Task 2.8
