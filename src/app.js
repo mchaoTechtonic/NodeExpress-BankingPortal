@@ -53,6 +53,12 @@ app.get("/transfer", function (req, res) {
   res.render("transfer");
 });
 
+app.post("/transfer", function (req, res) {
+  const { from, to, amount } = req.body;
+  accounts[from].balance -= amount;
+  accounts[to].balance += amount;
+});
+
 // Task 2.8
 app.listen(3000, () => {
   console.log("PS Project Running on port 3000!");
