@@ -66,9 +66,26 @@ app.post("/transfer", function (req, res) {
   res.render("transfer", { message: "Transfer Completed" });
 });
 
-// Task 4.10
+// Task 3.10
 app.get("/payment", function (req, res) {
   res.render("payment", { account: accounts.credit });
+});
+
+// Task 3.10
+app.post("/payment", function (req, res) {
+  const { amount } = req.body;
+  accounts.credit.balance -= parseInt(amount);
+  accounts.credit.available += parseInt(amount);
+  const accountsJSON = JSON.stringify(accounts);
+  fs.writeFileSync(
+    path.join(__dirname, "json", "accounts.json"),
+    accountsJSON,
+    "utf8"
+  );
+  res.render("payment", {
+    message: "Payment Successful",
+    account: accounts.credit,
+  });
 });
 
 // Task 2.8
