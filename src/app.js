@@ -4,6 +4,9 @@ const express = require("express");
 const { resolveSoa } = require("dns");
 
 const { accounts, users, writeJSON } = require("./data.js");
+
+const accountRoutes = require("./routes/accounts");
+const servicesRoutes = require("./routes/services");
 const app = express();
 
 app.set("views", path.join(__dirname, "views")); //when we call .render() below, our app checks in this folder
@@ -16,23 +19,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 //Task 3.1+3.2
-
+app.use("/account", accountRoutes);
 // Task 2.7 -- the index route
 app.get("/", function (req, res) {
   res.render("index", { title: "Account Summary", accounts });
 });
 
 // Task 3.5-6 -- the savings route, and the other two routes
-app.get("/savings", function (req, res) {
-  res.render("account", { account: accounts.savings });
-});
-
-app.get("/checking", function (req, res) {
-  res.render("account", { account: accounts.checking });
-});
-app.get("/credit", function (req, res) {
-  res.render("account", { account: accounts.credit });
-});
 
 // Task 3.10
 app.get("/profile", function (req, res) {
@@ -40,35 +33,7 @@ app.get("/profile", function (req, res) {
 });
 
 // Task 4.2
-app.get("/transfer", function (req, res) {
-  res.render("transfer");
-});
-
-app.post("/transfer", function (req, res) {
-  const { from, to, amount } = req.body;
-  accounts[from].balance -= parseInt(amount);
-  accounts[to].balance += parseInt(amount);
-
-  writeJSON();
-  res.render("transfer", { message: "Transfer Completed" });
-});
-
-// Task 3.10
-app.get("/payment", function (req, res) {
-  res.render("payment", { account: accounts.credit });
-});
-
-// Task 3.10
-app.post("/payment", function (req, res) {
-  const { amount } = req.body;
-  accounts.credit.balance -= parseInt(amount);
-  accounts.credit.available += parseInt(amount);
-  writeJSON();
-  res.render("payment", {
-    message: "Payment Successful",
-    account: accounts.credit,
-  });
-});
+app.use("/services", servicesRoutes);
 
 // Task 2.8
 app.listen(3000, () => {
