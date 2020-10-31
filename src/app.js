@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
-
 const express = require("express");
 const { resolveSoa } = require("dns");
 
+const { accounts, users, writeJSON } = require("./data.js");
 const app = express();
 
 app.set("views", path.join(__dirname, "views")); //when we call .render() below, our app checks in this folder
@@ -16,15 +16,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
 //Task 3.1+3.2
-const accountData = fs.readFileSync(
-  path.join(__dirname, "json", "accounts.json"),
-  { encoding: "utf8" }
-);
-const accounts = JSON.parse(accountData);
-const userData = fs.readFileSync(path.join(__dirname, "json", "users.json"), {
-  encoding: "utf8",
-});
-const users = JSON.parse(userData);
 
 // Task 2.7 -- the index route
 app.get("/", function (req, res) {
@@ -57,12 +48,8 @@ app.post("/transfer", function (req, res) {
   const { from, to, amount } = req.body;
   accounts[from].balance -= parseInt(amount);
   accounts[to].balance += parseInt(amount);
-  const accountsJSON = JSON.stringify(accounts);
-  fs.writeFileSync(
-    path.join(__dirname, "json", "accounts.json"),
-    accountsJSON,
-    "utf8"
-  );
+
+  writeJSON();
   res.render("transfer", { message: "Transfer Completed" });
 });
 
@@ -76,12 +63,7 @@ app.post("/payment", function (req, res) {
   const { amount } = req.body;
   accounts.credit.balance -= parseInt(amount);
   accounts.credit.available += parseInt(amount);
-  const accountsJSON = JSON.stringify(accounts);
-  fs.writeFileSync(
-    path.join(__dirname, "json", "accounts.json"),
-    accountsJSON,
-    "utf8"
-  );
+  writeJSON();
   res.render("payment", {
     message: "Payment Successful",
     account: accounts.credit,
